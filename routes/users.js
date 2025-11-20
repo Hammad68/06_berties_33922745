@@ -73,13 +73,11 @@ router.post('/loggedin', function (req, res, next) {
     db.query(sqlquery, [username], (err, result) => {
 
         if(err){
-            auditlogin(username, false, ipAddress);
             return next(err);
         }
 
         // User not found
         if(result.length === 0){
-            auditlogin(username, false, ipAddress);
             return res.status(401).send('User not found');
         }
 
@@ -90,7 +88,6 @@ router.post('/loggedin', function (req, res, next) {
         bcrypt.compare(plainPassword, passwordFromDB, function(err, isMatch) {
 
             if (err){
-                auditlogin(username, false, ipAddress);
                 return next(err);
             }
 
