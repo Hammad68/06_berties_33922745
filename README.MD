@@ -18,5 +18,18 @@ Uses node.js with Express and EJS.
 - whenever a registered user attempts to login - insert the username, current time, login_status and ip_address into the audits table
 - we will store all login attempts and fetch them from the database to show them
 
+## Access Control
+- userslist page containing the details of the users is only accessible if the user is signed in.
+- audit page that has the login audit is only be accessible by the logged in user.
+- addbook page for adding more books to the database can only be done by the user after logging in.
+- login, register, about, search, bargainbooks can be accessible without logging in.
+
+## Input Validation
+
+
+## Input Sanitization
+
+
+
 ## Online Access
 https://www.doc.gold.ac.uk/usr/354/
