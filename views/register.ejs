@@ -1,18 +1,56 @@
 <!doctype html>
 <html>
   <head>
-    <title>Register for <%=shopData.shopName%></title>
-    <link rel="stylesheet"  type="text/css" href="/main.css" />
+    <title>Register for <%= shopData.shopName %></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
   </head>
+
   <body>
-    <h1>Register for <%=shopData.shopName%></h1>
+
+    <h1>Register for <%= shopData.shopName %></h1>
+
     <form method="POST" action="registered">
-        <p>First name: <input id="first" type="text" name="first" required/></p>
-        <p>Last name: <input id="last" type="text" name="last" required/></p>
-        <p>Username: <input id="username" type="text" name="username" required/></p>
-        <p>Email: <input id="email" type="email" name="email" required/></p>
-        <p>Password: <input id="password" type="password" name="password" required/></p>
-        <input type="submit" value="Register" />
-      </form>
+
+      <p>
+        First name:
+        <input id="first" type="text" name="first"
+          value="<%= formData?.first || '' %>" required>
+      </p>
+
+      <p>
+        Last name:
+        <input id="last" type="text" name="last"
+          value="<%= formData?.last || '' %>" required>
+      </p>
+
+      <p>
+        Username:
+        <input id="username" type="text" name="username"
+          value="<%= formData?.username || '' %>" required>
+      </p>
+
+      <p>
+        Email:
+        <input id="email" type="text" name="email"
+          value="<%= formData?.email || '' %>" required>
+      </p>
+
+      <p>
+        Password:
+        <input id="password" type="password" name="password" required>
+      </p>
+
+      <input type="submit" value="Register">
+    </form>
+
+
+
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div class="error-box">
+        <% errors.forEach(err => { %>
+          <p><%= err.msg %></p>
+        <% }) %>
+      </div>
+    <% } %>
   </body>
 </html>
