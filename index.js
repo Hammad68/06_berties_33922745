@@ -14,9 +14,6 @@ const expressSanitizer = require('express-sanitizer');
 // Tell Express that we want to use EJS as the templating engine
 app.set('view engine', 'ejs')
 
-// Create an input sanitizer
-app.use(expressSanitizer());
-
 // Set up the body parser 
 app.use(express.urlencoded({ extended: true }))
 
@@ -47,6 +44,9 @@ app.use(session({
         expires: 600000
     }
 }))
+
+// Create an input sanitizer
+app.use(expressSanitizer());
 
 // Load the route handlers
 const mainRoutes = require("./routes/main")
