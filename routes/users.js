@@ -30,7 +30,7 @@ router.post('/registered',
     function (req, res, next) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.render('./register', {errors: errors.array(), formData : req.body});
+            res.render('register', {errors: errors.array(), formData : req.body});
             return;
         }
         else { 
