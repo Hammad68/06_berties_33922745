@@ -30,5 +30,5 @@ CREATE TABLE audits (
 );
 
 # Create the application user
-CREATE USER IF NOT EXISTS 'berties_books_app'@'localhost' IDENTIFIED BY 'qwertyuiop'; 
-GRANT ALL PRIVILEGES ON berties_books.* TO ' berties_books_app'@'localhost';
+CREATE USER IF NOT EXISTS process.env.BP_USER @process.env.BB_HOST IDENTIFIED BY process.env.BP_PASSWORD; 
+GRANT ALL PRIVILEGES ON process.env.BP_DATABASE.* TO process.env.BP_USER @process.env.BB_HOST;
