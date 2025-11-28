@@ -7,9 +7,17 @@
   <body>
     <h1>Login for <%=shopData.shopName%></h1>
     <form method="POST" action="loggedin">
-        <p>Username: <input id="username" type="text" name="username" required/></p>
+        <p>Username: <input id="username" type="text" name="username" value="<%= typeof formData !== 'undefined' ? formData.username : '' %>" required/></p>
         <p>Password: <input id="password" type="password" name="password" required/></p>
         <input type="submit" value="Login" />
-      </form>
+    </form>
+
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div class="error-box">
+        <% errors.forEach(err => { %>
+          <p><%= err.msg %></p>
+        <% }) %>
+      </div>
+    <% } %>
   </body>
 </html>
