@@ -64,17 +64,17 @@ router.get('/forcast-search',
     }
 
     if (cityname !== ""){
-        let apiKey = '34a44597ddf44159712d546c9f1a0594'
+        let apiKey = process.env.apiKey
         let city = cityname
         let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
                         
         request(url, function (err, response, body) {
             if(err){
-                next(err)
+                return next(err)
             } 
             var weather = JSON.parse(body)
             if (weather.cod && weather.cod != 200) {
-                res.render('weather.ejs', {weatherData: null, error: 'Opps! unvalid city'});
+                res.render('weather.ejs', {weatherData: null, error: 'Opps! Results Not Found'});
             }
             else {
                 res.render('weather.ejs', {weatherData: weather, error: null});
