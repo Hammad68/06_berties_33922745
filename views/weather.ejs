@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: darkcyan;
+            margin: 40px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .weather-card {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #e6f2ff;
+        }
+        .error-message {
+            color: #a94442;
+            background-color: #f2dede;
+            border: 1px solid #ebccd1;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        form {
+            color: #d9534f;
+        }
+        
+        /* --- Styles for side-by-side layout --- */
+        .main-info, .details-row {
+            display: flex; /* Activates Flexbox */
+            justify-content: space-between; /* Puts space between the two items */
+            align-items: center; /* Vertically centers the items */
+            margin-bottom: 10px;
+        }
+
+        .city-name {
+            font-size: 2em; /* Nicer font size */
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .temperature {
+            font-size: 2em; /* Nicer font size, matches city name height */
+            color: #d9534f;
+            font-weight: bold;
+        }
+        
+        .detail-item {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Forecast</h1>
+
+        <form action="/weather/forcast-search" method="GET">
+            <input type="text" name="search-box" placeholder="Enter city name">
+            <button type="submit">Get Forecast</button>
+        </form>
+
+        <hr>
+
+        <% if (error) { %>
+            <div class="error-message">
+                <%= error %>
+            </div>
+        <% } else if (weatherData) { %>
+            
+            <div class="weather-card">
+                <!-- Row 1: City Name and Temperature side-by-side -->
+                <div class="main-info">
+                    <div class="city-name"><%= weatherData.name %>, <%= weatherData.sys.country %></div>
+                    <div class="temperature"><%= weatherData.main.temp %> °C</div>
+                </div>
+
+                <!-- Row 2: Humidity and Wind Speed side-by-side -->
+                <div class="details-row">
+                    <div class="detail-item">Humidity: <%= weatherData.main.humidity %>%</div>
+                    <div class="detail-item">Wind Speed: <%= weatherData.wind.speed %> m/s</div>
+                </div>
+            </div>
+
+        <% } else { %>
+            <p>Enter a city name above to see the weather forecast.</p>
+        <% } %>
+    </div>
+</body>
+</html>

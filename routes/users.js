@@ -3,6 +3,7 @@ const express = require("express")
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const { check, validationResult } = require('express-validator');
+const { render } = require("pug");
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.userId ) {
@@ -95,57 +96,58 @@ router.post('/loggedin',
     check('password').isLength({ min: 1 }).withMessage('Password cannot be empty.').trim().escape() // Sanitize input immediately
     ],
     function (req, res, next) {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        res.render('userslogin', {errors: errors.array(), formData: req.body})
-        return;
-    }
-    else {
-        const plainPassword = req.sanitize(req.body.password);
-        const username = req.sanitize(req.body.username);
-        const ipAddress = req.ip;
-        // Save user session here, when login is successful
-        req.session.userId = req.body.username;
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            res.render('userslogin', {errors: errors.array(), formData: req.body})
+            return;
+        }
+        else {
+            const plainPassword = req.sanitize(req.body.password);
+            const username = req.sanitize(req.body.username);
+            const ipAddress = req.ip;
+            // Save user session here, when login is successful
+            req.session.userId = req.body.username;
 
 
-        // Fetch hashed password for that username
-        let sqlquery = 'SELECT username, password FROM users WHERE username = ?'
+            // Fetch hashed password for that username
+            let sqlquery = 'SELECT username, password FROM users WHERE username = ?'
 
-        db.query(sqlquery, [username], (err, result) => {
+            db.query(sqlquery, [username], (err, result) => {
 
-            if(err){
-                return next(err);
-            }
-
-            // User not found
-            if(result.length === 0){
-                return res.status(401).send('User not found');
-            }
-
-            const user = result[0];
-            const passwordFromDB = user.password;
-
-            // Compare plain password with hashed password
-            bcrypt.compare(plainPassword, passwordFromDB, function(err, isMatch) {
-
-                if (err){
+                if(err){
                     return next(err);
                 }
 
-                // Password correct
-                if(isMatch){
-                    auditlogin(username, true, ipAddress);
-                    res.status(200).send('Login Successful... <a href='+'/'+'>Home</a>')
+                // User not found
+                if(result.length === 0){
+                    return res.status(401).send('User not found');
                 }
-                else {
-                    // Incorrect password
-                    auditlogin(username, false, ipAddress);
-                    res.status(401).send('Invalid username or password... <a href='+'login'+'>Home</a>')
-                }
-            });
-        });      
-    };
-});
+
+                const user = result[0];
+                const passwordFromDB = user.password;
+
+                // Compare plain password with hashed password
+                bcrypt.compare(plainPassword, passwordFromDB, function(err, isMatch) {
+
+                    if (err){
+                        return next(err);
+                    }
+
+                    // Password correct
+                    if(isMatch){
+                        auditlogin(username, true, ipAddress);
+                        res.status(200).send('Login Successful... <a href='+'/'+'>Home</a>')
+                    }
+                    else {
+                        // Incorrect password
+                        auditlogin(username, false, ipAddress);
+                        res.status(401).send('Invalid username or password... <a href='+'login'+'>Home</a>')
+                    }
+                });
+            });      
+        };
+    }
+);
 
 // Display login audit history
 router.get('/audit', redirectLogin, function (req, res, next) {

@@ -34,5 +34,59 @@ Uses node.js with Express and EJS.
 - process involves escaping and sanitizing the input from malicious characters and turning it into harmless html codes.
 - this also provided security against the sql injection attack where attacker tries to inject sql query tricking the website to reveal database records.
 
+## Weather API - Response - Error Handling
+The application handles errors robustly in two main ways:
+- **Input Validation**: User-provided city names are validated (must be letters only) and sanitized on the server before the API call is made.
+
+- **API Response Checking**: The application explicitly checks the API's status code (cod). If a city is not found (cod: 404), a user-friendly error message is displayed, preventing the application from crashing. Network errors are captured and handled by the global error middleware.
+
+
+## Books API - Endpoint Breif
+The application exposes a single primary endpoint for retrieving book data.
+
+---
+
+### Endpoint: `/api/books`
+- **Method**: `GET`
+- **Description**: Retrieves a list of books from the database. The results can be filtered, searched, and sorted using optional query parameters.
+
+### Query Parameters:
+You can combine any of the parameters below in a single request.
+
+| Parameter  | Description                                                                                                                        | Example            |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `search`   | Filters books by partial match within the **book name** field.                                                                     | `?search=universe` |
+| `minprice` | Sets the **minimum price** in a price range filter (returns books with price ≥ this value). Usually used together with `maxprice`. | `?minprice=10`     |
+| `maxprice` | Sets the **maximum price** in a price range filter (returns books with price ≤ this value). Usually used together with `minprice`. | `?maxprice=25`     |
+| `sort`     | Sorts the results by `name` or `price`.                                                                                            | `?sort=price`      |
+
+
+### Usage Examples:
+
+| Description               | Example URL                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------- |
+| **Get all books**         | `http://localhost:8000/api/books`                                               |
+| **Search & Sort**         | `http://localhost:8000/api/books?search=world&sort=name`                        |
+| **Filter by Price Range** | `http://localhost:8000/api/books?minprice=5&maxprice=10`                        |
+| **Combined Filters**      | `http://localhost:8000/api/books?search=world&minprice=1&maxprice=15&sort=name` |
+
+
+
+### Example JSON Response:
+A successful request returns a JSON array:
+
+    [
+        {
+            "id": 1,
+            "name": "The Universe A to Z",
+            "price": 12.99
+        },
+        {
+            "id": 2,
+            "name": "World Atlas 2024",
+            "price": 24.50
+        }
+    ]
+
 ## Online Access
 https://www.doc.gold.ac.uk/usr/354/
