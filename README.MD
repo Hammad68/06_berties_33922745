@@ -44,8 +44,6 @@ The application handles errors robustly in two main ways:
 ## Books API - Endpoint Breif
 The application exposes a single primary endpoint for retrieving book data.
 
----
-
 ### Endpoint: `/api/books`
 - **Method**: `GET`
 - **Description**: Retrieves a list of books from the database. The results can be filtered, searched, and sorted using optional query parameters.
